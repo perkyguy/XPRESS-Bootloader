@@ -163,7 +163,7 @@ void FATRecordSet( uint8_t * buffer, uint8_t seg)
 //------------------------------------------------------------------------------
 // ROOT sector at LBA = 3
 
-const char readme[] = "<html><head><meta http-equiv=\"refresh\" content=\"0;URL='http://mplabxpress.microchip.com'\" /></head></html>";
+const char readme[] = "<meta http-equiv=\"refresh\" content=\"0;URL='http://mplabxpress.microchip.com'\" />";
 
 uint8_t readme_size( void) {
     return sizeof( readme);     // required by direct.c (external references return always size 0!?)

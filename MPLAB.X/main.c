@@ -23,10 +23,10 @@ limitations under the License.
 
 #include "usb.h"
 #include "usb_device_msd.h"
-#include "usb_device_cdc.h"
+//#include "usb_device_cdc.h"
 
 #include "app_device_msd.h"
-#include "app_device_cdc.h"
+//#include "app_device_cdc.h"
 #include "direct.h"
 #include "app_space.h"
 
@@ -70,24 +70,18 @@ MAIN_RETURN main(void)
             /* Jump back to the top of the while loop. */
             continue;
         }
-        if(DIRECT_ProgrammingInProgress()){
-            LED_On(RED_LED);
-            LED_Off(GREEN_LED);
-        } else {
+        if(!DIRECT_ProgrammingInProgress() && BUTTON_IsPressed(BUTTON_S1)){
             // implement the reset button - Stop bootloader if we aren't programming
-            if ( BUTTON_IsPressed(BUTTON_S1)) {
-                USBSoftDetach();
-                run_bootloader = false;
-            }
-            else {
-                LED_On(GREEN_LED);
-                LED_Off(RED_LED);
-            }
+            USBSoftDetach();
+            run_bootloader = false;
+        } else {
+            LED_On(GREEN_LED);
+            LED_Off(RED_LED);
         }
 
         //Application specific tasks
         APP_DeviceMSDTasks();
-        APP_DeviceCDCEmulatorTasks();
+//        APP_DeviceCDCEmulatorTasks();
 
     }//end while
     APP_Run();
@@ -136,7 +130,7 @@ bool USER_USB_CALLBACK_EVENT_HANDLER(USB_EVENT event, void *pdata, uint16_t size
             /* When the device is configured, we can (re)initialize the demo
              * code. */
             APP_DeviceMSDInitialize();
-            APP_DeviceCDCEmulatorInitialize();
+//            APP_DeviceCDCEmulatorInitialize();
 
             break;
 
@@ -147,7 +141,7 @@ bool USER_USB_CALLBACK_EVENT_HANDLER(USB_EVENT event, void *pdata, uint16_t size
             /* We have received a non-standard USB request.  The MSD driver
              * needs to check to see if the request was for it. */
             USBCheckMSDRequest();
-            USBCheckCDCRequest();
+//            USBCheckCDCRequest();
 
             break;
 

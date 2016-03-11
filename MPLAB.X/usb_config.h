@@ -154,7 +154,7 @@ limitations under the License.
 
 /** DEVICE CLASS USAGE *********************************************/
 #define USB_USE_MSD
-#define USB_USE_CDC
+//#define USB_USE_CDC
 
 /** ENDPOINTS ALLOCATION *******************************************/
 

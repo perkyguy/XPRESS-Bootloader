@@ -8,9 +8,6 @@ This application is designed to act as a boot loader for the MPLAB
 Xpress Evaluation Board's 18F25K50. Specifically it was meant to be 
 used for the Hackaday Belgrade Badge.
 
-A serial to USB bridge function is simultaneously available during 
-bootloader operation
-
 Additional information about the Hackaday Belgrade Badge can be found at
 [https://hackaday.io/project/9509-badge-for-hackaday-belgrade-conference](<https://hackaday.io/project/9509-badge-for-hackaday-belgrade-conference>)
 
@@ -42,7 +39,7 @@ Usage
 
 Specifics/Limitations
 ---------
--   The bootloader currently occupies 0x0000-0x2FFF of Program Flash. Application code **must** stay above this. Any code in HEX file below this value will **not** be written.
+-   The bootloader currently reserves 0x0000-0x2FFF of the Program Flash. Application code **must** stay above this. Any code in HEX file below this value will **not** be written.
     
 -   Application interrupt vectors are moved to 0x3008 and 0x3018
 

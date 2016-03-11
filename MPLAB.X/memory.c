@@ -1,3 +1,26 @@
+/**
+  MEMORY Generated Driver File
+
+  @Company
+    Microchip Technology Inc.
+
+  @File Name
+    memory.c
+
+  @Summary
+    This is the generated driver implementation file for the MEMORY driver using MPLAB(c) Code Configurator
+
+  @Description
+    This file provides implementations of driver APIs for MEMORY.
+    Generation Information :
+        Product Revision  :  MPLAB(c) Code Configurator - v3.00
+        Device            :  PIC18LF25K50
+        Driver Version    :  2.00
+    The generated drivers are tested against the following:
+        Compiler          :  XC8 1.35
+        MPLAB             :  MPLAB X 3.20
+*/
+
 /*
 Copyright (c) 2013 - 2015 released Microchip Technology Inc.  All rights reserved.
 
@@ -42,6 +65,11 @@ uint8_t FLASH_ReadByte(uint32_t flashAddr)
     asm("TBLRD");
 
     return (TABLAT);
+}
+
+uint16_t FLASH_ReadWord(uint32_t flashAddr)
+{
+    return ((((uint16_t)FLASH_ReadByte(flashAddr+1))<<8)|(FLASH_ReadByte(flashAddr)));
 }
 
 void FLASH_WriteSome(uint32_t flashAddr, uint8_t *flashRdBufPtr, uint8_t *byte, uint8_t count){
