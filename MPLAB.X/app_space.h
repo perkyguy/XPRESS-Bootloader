@@ -11,11 +11,11 @@
 
 #define APP_init() APP_exit();
 #define APP_END_ADDRESS     END_FLASH
-#define APP_START_ADDRESS   0x4FFF
+#define APP_START_ADDRESS   0x2FFF
 
-#define APP_INT_LP_VECTOR   0x4008
-#define APP_INT_HP_VECTOR   0x4018
-#define APP_CONFIG_STORE    0x3FF0
+//#define APP_INT_LP_VECTOR   0x3008
+//#define APP_INT_HP_VECTOR   0x3018
+//#define APP_CONFIG_STORE    0x3FF0
 
 #define CFG_ADDRESS         0x8000   
 #define CFG_NUM             5
