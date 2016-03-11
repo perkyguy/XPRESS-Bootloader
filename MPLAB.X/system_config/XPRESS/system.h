@@ -22,8 +22,8 @@ limitations under the License.
 #include "io_mapping.h"
 
 // semantic versioning
-#define MAJOR   1       // change only when incompatible changes are made
-#define MINOR   2       // change when adding functionality or fixing bugs
+#define MAJOR   2       // change only when incompatible changes are made
+#define MINOR   1       // change when adding functionality or fixing bugs
 
 // this release date
 #define YEAR            2016

@@ -28,20 +28,24 @@ limitations under the License.
 #include "app_device_msd.h"
 #include "app_device_cdc.h"
 #include "direct.h"
-#include "lvp.h"
+#include "app_space.h"
 
 /********************************************************************
  * Function:        void main(void)
  *******************************************************************/
 MAIN_RETURN main(void)
 {
+    bool run_bootloader;
     SYSTEM_Initialize();
-
-    USBDeviceInit();
-    USBDeviceAttach();
-
-    while(1)
-    {
+    run_bootloader = BUTTON_IsPressed(BUTTON_S1);
+    if(run_bootloader){
+        while(BUTTON_IsPressed(BUTTON_S1)) ; // Let go of the button!
+        USBDeviceInit();
+        USBDeviceAttach();
+        DIRECT_Initialize();    // reset the programming state machine
+    }
+    
+    while(run_bootloader){
         SYSTEM_Tasks();
 
         #if defined(USB_POLLING)
@@ -66,19 +70,17 @@ MAIN_RETURN main(void)
             /* Jump back to the top of the while loop. */
             continue;
         }
-        // implement nMCLR button
-        if ( BUTTON_IsPressed(BUTTON_S1)) {
-            LUNSoftDetach(0);       // mark the media as temporarily unavailable 
-            ICSP_nMCLR = SLAVE_RESET;
-            LED_Off(GREEN_LED);     // turn off RED LED to indicate ready for download
-            LED_On (RED_LED);
-            DIRECT_Initialize();    // reset the programming state machine
-        }
-        else { // simply act as a slave reset 
-            LUNSoftAttach(0);                       // mark the media as available
-            if ( !DIRECT_ProgrammingInProgress()) {  // do not release during prog.!
-                ICSP_nMCLR = SLAVE_RUN;
-                LED_On(GREEN_LED);   // turn off RED LED to indicate ready for download
+        if(DIRECT_ProgrammingInProgress()){
+            LED_On(RED_LED);
+            LED_Off(GREEN_LED);
+        } else {
+            // implement the reset button - Stop bootloader if we aren't programming
+            if ( BUTTON_IsPressed(BUTTON_S1)) {
+                USBSoftDetach();
+                run_bootloader = false;
+            }
+            else {
+                LED_On(GREEN_LED);
                 LED_Off(RED_LED);
             }
         }
@@ -88,6 +90,7 @@ MAIN_RETURN main(void)
         APP_DeviceCDCEmulatorTasks();
 
     }//end while
+    APP_Run();
 }//end main
 
 

@@ -22,7 +22,7 @@ limitations under the License.
 #include <fileio.h>
 #include <direct.h>
 #include "files.h"
-#include "lvp.h"
+#include "app_space.h"
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -79,7 +79,7 @@ uint32_t DIRECT_CapacityRead(void* config)
  *****************************************************************************/
 uint8_t DIRECT_InitIO (void* config)
 {
-    LVP_init();
+    APP_init();
     return  true;
 }
 
@@ -175,14 +175,12 @@ uint8_t DIRECT_WriteProtectStateGet(void* config)
  Rows are aligned (normalized) and written directly to the target using LVP ICSP
  Special treatment is reserved for words written to 'configuration' addresses 
  ******************************************************************************/
-#define ROW_SIZE     32      // for all pic16f188xx
-#define CFG_ADDRESS 0x8000   // for all pic16f188xx
-#define CFG_NUM      5       // number of config words for PIC16F188xx
+#define ROW_SIZE     32      // for all pic18f25K50
 
 // internal state
 uint16_t row[ ROW_SIZE];    // buffer containing row being formed
 uint32_t row_address;       // destination address of current row 
-bool     lvp;               // flag: low voltage programming in progress
+bool     app;               // flag: low voltage programming in progress
 
 /** 
  * State machine initialization
@@ -190,7 +188,7 @@ bool     lvp;               // flag: low voltage programming in progress
 void DIRECT_Initialize( void) {
     memset((void*)row, 0xff, sizeof(row));    // fill buffer with blanks
     row_address = 0x8000;
-    lvp = false;
+    app = false;
 }
 
 /**
@@ -198,7 +196,7 @@ void DIRECT_Initialize( void) {
  * @return  true if lvp sequence in progress
  */
 bool DIRECT_ProgrammingInProgress( void) {
-    return lvp;
+    return app;
 }
 
 bool isDigit( char * c){
@@ -207,78 +205,10 @@ bool isDigit( char * c){
     if (*c > 0xf)  return false;
     return true;
 }
-    
-void lvpWrite( void){
-    // check for first entry in lvp 
-    if (!lvp) {
-        lvp = true;
-        LVP_enter();
-        LVP_bulkErase();
-    }
-    if (row_address >= CFG_ADDRESS) {    // use the special cfg word sequence
-        LVP_cfgWrite( &row[7], CFG_NUM);
-    }
-    else { // normal row programming sequence
-        LVP_addressLoad( row_address);
-        LVP_rowWrite( row, ROW_SIZE);
-    }
-}
 
-void writeRow( void) {
-    // latch and program a row, skip if blank
-    uint8_t i;
-    uint16_t chk = 0xffff;
-    for( i=0; i< ROW_SIZE; i++) chk &= row[i];  // blank check
-    if (chk != 0xffff) { 
-        lvpWrite();
-        memset((void*)row, 0xff, sizeof(row));    // fill buffer with blanks
-    }
-}
-
-/**
- * Align and pack words in rows, ready for lvp programming
- * @param address       starting address 
- * @param data          buffer
- * @param data_count    number of bytes 
- */
-void packRow( uint32_t address, uint8_t *data, uint8_t data_count) {
-    // copy only the bytes from the current data packet up to the boundary of a row 
-    uint8_t  index = (address & 0x3e)>>1; 
-    uint32_t new_row = (address & 0xfffc0)>>1;
-    if (new_row != row_address) {
-        writeRow();
-        row_address = new_row;
-    }
-    // ensure data is always even (rounding up)
-    data_count = (data_count+1) & 0xfe;
-    // copy data up to the row boundaries
-    while ((data_count > 0) && (index < ROW_SIZE)){
-        uint16_t word = *data++;
-        word += ((uint16_t)(*data++)<<8);
-        row[index++] = word;
-        data_count -= 2;
-    }
-    // if a complete row was filled, proceed to programming
-    if (index == ROW_SIZE) { 
-        writeRow();
-        // next consider the split row scenario
-        if (data_count > 0) {   // leftover must spill into next row
-            row_address += ROW_SIZE;
-            index = 0;
-            while (data_count > 0){
-                uint16_t word = *data++;
-                word += ((uint16_t)(*data++)<<8);
-                row[index++] = word;
-                data_count -= 2;
-            }
-        }
-    }
-}
-
-void programLastRow( void) {
-    writeRow();
-    LVP_exit();
-    lvp = false;    
+void lastRow( void) {
+    APP_exit();
+    app = false;    
 }
 
 // the actual state machine - Hex Machina
@@ -387,11 +317,11 @@ bool ParseHex(char c)
                 // chksum is good 
                 state = SOL; 
                 if (record_type == 0) 
-                    packRow( ext_address + address, data, data_count);
+                    APP_write( ext_address + address, data, data_count);
                 else if (record_type == 4) 
                     ext_address = ((uint32_t)(data[0]) << 24) + ((uint32_t)(data[1]) << 16);
                 else if (record_type == 1) { 
-                    programLastRow();
+                    lastRow();
                     ext_address = 0;
                 }
                 else return false;

@@ -24,7 +24,7 @@ limitations under the License.
 #include "fileio.h"
 #include "uart.h"
 #include "direct.h"
-
+#include "app_space.h"
 
 /** CONFIGURATION Bits **********************************************/
 #pragma config PLLSEL   = PLL3X     // PLL Selection (3x clock multiplier)
@@ -151,5 +151,10 @@ void interrupt SYS_InterruptHigh(void)
     #if defined(USB_INTERRUPT)
         USBDeviceTasks();
     #endif
+    APP_ISR_High();
 }
 
+void interrupt low_priority SYS_InterruptLow(void)
+{
+    APP_ISR_Low();
+}

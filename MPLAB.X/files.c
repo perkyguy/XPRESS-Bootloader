@@ -119,7 +119,7 @@ void VolumeBootRecordGet( uint8_t * buffer, uint8_t seg)
     buffer[ 0x028] = 0x67; 
     buffer[ 0x029] = 0x94; 
     buffer[ 0x02a] = 0xC4;		
-    memcpy( (void*)&buffer[ 0x02b], (void*)"XPRESS     ", 11); // Volume Label (11 bytes)
+    memcpy( (void*)&buffer[ 0x02b], (void*)"HackABadge ", 11); // Volume Label (11 bytes)
     memcpy( (void*)&buffer[ 0x036], (void*)"FAT12   ", 8);     // FAT system ( 8 bytes)
     return;
     }
@@ -170,7 +170,7 @@ uint8_t readme_size( void) {
 }
 
 const uint8_t entry0[ ROOT_ENTRY_SIZE] = { 
-    'X','P','R','E','S','S',' ',' ',' ',' ',' ',  // Drive Name (11 characters, padded with spaces)
+    'H','a','c','k','A','B','a','d','g','e',' ',  // Drive Name (11 characters, padded with spaces)
     0x08, //specify this entry as a volume label
     0x00, //Reserved
 

@@ -1,13 +1,18 @@
-XPRESS-Loader
+XPRESS-BootLoader
 =============
 
-USB-MSD Programmer and CDC Serial Port Emulator
------------------------------------------------
+USB-MSD Bootloader
+------------------
 
-This application is designed to act as a fast on-board programmer for the MPLAB
-Xpress Evaluation Board.
+This application is designed to act as a boot loader for the MPLAB
+Xpress Evaluation Board's 18F25K50. Specifically it was meant to be 
+used for the Hackaday Belgrade Badge.
 
-A serial to USB bridge function is simultaneously available.
+A serial to USB bridge function is simultaneously available during 
+bootloader operation
+
+Additional information about the Hackaday Belgrade Badge can be found at
+[https://hackaday.io/project/9509-badge-for-hackaday-belgrade-conference](<https://hackaday.io/project/9509-badge-for-hackaday-belgrade-conference>)
 
 Additional information about the MPLAB Xpress project can be found at
 [https://mplabxpress.microchip.com](<https://mplabxpress.microchip.com>)
@@ -20,21 +25,37 @@ root directory of the repository). To request to license this code under the MLA
 license (www.microchip.com/mla\_license), please contact
 mla\_licensing\@microchip.com.
 
+
+Usage
+-----
+-   Power off the board and press Button S1 (RB0 to digital low), Xpress Board has this labeled as "Reset"
+
+-   Apply power to the board, and then release the button (RB0 to Digital High)
+
+-   A new mass storage device named HackABadge should appear
+
+-   Copy a hex file (appropriately addressed) to this device
+
+-   Press the button S1 again to exit the bootloader
+
+-   Upon exiting the bootloader, or on a restart, code execution will begin at **0x3000**
+
+Specifics/Limitations
+---------
+-   The bootloader currently occupies 0x0000-0x2FFF of Program Flash. Application code **must** stay above this. Any code in HEX file below this value will **not** be written.
+    
+-   Application interrupt vectors are moved to 0x3008 and 0x3018
+
+-   Only will modify program flash memory. DataEE and Configuration word changes are **not** currently supported
+
 Product Support
 ---------------
 
--   This application runs on the PIC18LF25K50 and programs/interfaces to the
-    PIC16F18855.
+-   This application runs on the PIC18LF25K50.
 
--   The input (file) parsing algorithm is compatible with all PIC16/PIC18 INTEL
+-   The input (file) parsing algorithm is compatible with all PIC18 INTEL
     Hex files produced by the MPLAB XC8 compiler.
 
--   The programming algorithm is currently supporting only the new 8-bit
-    LVP-ICSP protocol common to the PIC16F188xx (5 digit) devices. It is also
-    assuming a fixed row size of 32 words.
-
--   The default serial interface does not support hardware handshake although
-    this feature can be enabled if required.
 
 Folder Structure
 ----------------
