@@ -23,10 +23,8 @@ limitations under the License.
 
 #include "usb.h"
 #include "usb_device_msd.h"
-//#include "usb_device_cdc.h"
 
 #include "app_device_msd.h"
-//#include "app_device_cdc.h"
 #include "direct.h"
 #include "app_space.h"
 
@@ -35,59 +33,82 @@ limitations under the License.
  *******************************************************************/
 MAIN_RETURN main(void)
 {
-    bool run_bootloader;
-    SYSTEM_Initialize();
-    run_bootloader = BUTTON_IsPressed(BUTTON_S1);
-    if(run_bootloader){
-        while(BUTTON_IsPressed(BUTTON_S1)) ; // Let go of the button!
-        USBDeviceInit();
-        USBDeviceAttach();
-        DIRECT_Initialize();    // reset the programming state machine
-    }
+    uint8_t i;
+    SYSTEM_Initialize(); // We only "initialize" the system in BL mode
+#if 0
+    BUTTON_Enable(BUTTON_S1); // We just want to enable our button at first
+    if(BUTTON_IsPressed(BUTTON_S1)){
+        // We are going into the bootloader, so load up our configs to a known state
+        APP_setBootloaderConfigs();
+    // if(true){
+        // while(BUTTON_IsPressed(BUTTON_S1)) ; // Let go of the button!
+//        SYSTEM_Initialize(); // We only "initialize" the system in BL mode
+        USBDeviceAttach(); // attach the part
     
-    while(run_bootloader){
-        SYSTEM_Tasks();
+        while(1){
+            // We will stay here until we don't want to anymore...
+            #if defined(USB_POLLING)
+                USBDeviceTasks();
+            #endif
 
-        #if defined(USB_POLLING)
-            USBDeviceTasks();
-        #endif
+            /* If the USB device isn't configured yet, we can't really do anything
+             * else since we don't have a host to talk to.  So jump back to the
+             * top of the while loop. */
+            if( USBGetDeviceState() < CONFIGURED_STATE )
+            {
+                /* Jump back to the top of the while loop. */
+                continue;
+            }
 
-        /* If the USB device isn't configured yet, we can't really do anything
-         * else since we don't have a host to talk to.  So jump back to the
-         * top of the while loop. */
-        if( USBGetDeviceState() < CONFIGURED_STATE )
-        {
-            /* Jump back to the top of the while loop. */
-            continue;
-        }
+            /* If we are currently suspended, then we need to see if we need to
+             * issue a remote wakeup.  In either case, we shouldn't process any
+             * keyboard commands since we aren't currently communicating to the host
+             * thus just continue back to the start of the while loop. */
+            if( USBIsDeviceSuspended() == true )
+            {
+                /* Jump back to the top of the while loop. */
+                continue;
+            }
+            // if(!DIRECT_ProgrammingInProgress() && BUTTON_IsPressed(BUTTON_S1)){
+            if(!DIRECT_ProgrammingInProgress() && !BUTTON_IsPressed(BUTTON_S1)){
+                // If we aren't programming, detach the usb device
+                USBSoftDetach();
+                // Write the application's configuration words
+                APP_cfgWrite();
+                // Exit the bootloader while(1);
+                break;
+            } else {
+//                LED_On(GREEN_LED);
+                // LED_Off(RED_LED);
+            }
 
-        /* If we are currently suspended, then we need to see if we need to
-         * issue a remote wakeup.  In either case, we shouldn't process any
-         * keyboard commands since we aren't currently communicating to the host
-         * thus just continue back to the start of the while loop. */
-        if( USBIsDeviceSuspended() == true )
-        {
-            /* Jump back to the top of the while loop. */
-            continue;
-        }
-        if(!DIRECT_ProgrammingInProgress() && BUTTON_IsPressed(BUTTON_S1)){
-            // implement the reset button - Stop bootloader if we aren't programming
-            USBSoftDetach();
-            run_bootloader = false;
-        } else {
-            LED_On(GREEN_LED);
-            LED_Off(RED_LED);
-        }
-
-        //Application specific tasks
-        APP_DeviceMSDTasks();
-//        APP_DeviceCDCEmulatorTasks();
-
-    }//end while
+            //Application specific tasks
+            APP_DeviceMSDTasks();
+        }//end while
+    }
+    LED_On(GREEN_LED);
+    while(1);
     APP_Run();
+#else
+    while(1){
+        BUTTON_Enable(BUTTON_S1); // We just want to enable our button at first
+        if(BUTTON_IsPressed(BUTTON_S1)){
+            uint8_t wrCfgData[] = {
+                      //0x21,0x08,0x5F,0x3C,0x00,0x91,0x80,0x00,0x0F,0xC0,0x0F,0xE0,0x0F,0x40
+                        0x21,0x08,0x5F,0x00,0x00,0x91,0x80,0x00,0x0F,0xC0,0x0F,0xE0,0x0F,0x40
+                      //   0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13
+                    };
+            APP_cfgStore(wrCfgData);
+            APP_cfgWrite();
+            APP_exit();
+            LED_Off(GREEN_LED);
+            while(1);
+        }
+    }
+#endif
 }//end main
 
-
+#if 0
 /*******************************************************************
  * Function:        bool USER_USB_CALLBACK_EVENT_HANDLER(
  *                        USB_EVENT event, void *pdata, uint16_t size)
@@ -130,8 +151,6 @@ bool USER_USB_CALLBACK_EVENT_HANDLER(USB_EVENT event, void *pdata, uint16_t size
             /* When the device is configured, we can (re)initialize the demo
              * code. */
             APP_DeviceMSDInitialize();
-//            APP_DeviceCDCEmulatorInitialize();
-
             break;
 
         case EVENT_SET_DESCRIPTOR:
@@ -141,8 +160,6 @@ bool USER_USB_CALLBACK_EVENT_HANDLER(USB_EVENT event, void *pdata, uint16_t size
             /* We have received a non-standard USB request.  The MSD driver
              * needs to check to see if the request was for it. */
             USBCheckMSDRequest();
-//            USBCheckCDCRequest();
-
             break;
 
         case EVENT_BUS_ERROR:
@@ -192,3 +209,4 @@ bool USER_USB_CALLBACK_EVENT_HANDLER(USB_EVENT event, void *pdata, uint16_t size
  End of File
 */
 
+#endif

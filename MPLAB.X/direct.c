@@ -175,10 +175,7 @@ uint8_t DIRECT_WriteProtectStateGet(void* config)
  Rows are aligned (normalized) and written directly to the target using LVP ICSP
  Special treatment is reserved for words written to 'configuration' addresses 
  ******************************************************************************/
-#define ROW_SIZE     32      // for all pic18f25K50
-
 // internal state
-uint16_t row[ ROW_SIZE];    // buffer containing row being formed
 uint32_t row_address;       // destination address of current row 
 bool     app;               // flag: low voltage programming in progress
 
@@ -186,7 +183,6 @@ bool     app;               // flag: low voltage programming in progress
  * State machine initialization
  */
 void DIRECT_Initialize( void) {
-    memset((void*)row, 0xff, sizeof(row));    // fill buffer with blanks
     row_address = 0x8000;
     app = false;
 }
@@ -229,7 +225,7 @@ bool ParseHex(char c)
     static uint32_t ext_address = 0;
     static uint8_t  checksum;
     static uint8_t  record_type;
-    static uint8_t  data_byte, data_index, data[16];
+    static uint8_t  data_index, data[16];
 
     switch( state){
         case SOL:
@@ -317,9 +313,10 @@ bool ParseHex(char c)
                 // chksum is good 
                 state = SOL; 
                 if (record_type == 0) 
-                    APP_write( ext_address + address, data, data_count);
+                    APP_write( (uint32_t)(ext_address + address), data, data_count);
                 else if (record_type == 4) 
-                    ext_address = ((uint32_t)(data[0]) << 24) + ((uint32_t)(data[1]) << 16);
+//                    ext_address = ((uint32_t)(data[0]) << 24) + ((uint32_t)(data[1]) << 16);
+                    ext_address = 0x300000;
                 else if (record_type == 1) { 
                     lastRow();
                     ext_address = 0;

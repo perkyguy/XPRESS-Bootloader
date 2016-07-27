@@ -155,17 +155,40 @@ int8_t FLASH_WriteBlock(uint32_t writeAddr, uint8_t *flashWrBufPtr )
 }
 
 int8_t FLASH_WriteConfigs(uint8_t *cfgWrBufPtr){
+    uint8_t bAdd;
     uint8_t i;
-    // Write block of data
-    TBLPTRU = (uint8_t)0x30;    // Load Table point register
-    TBLPTRH = (uint8_t)0x00;
-    for (i=0; i < 14; i++)
+//    // Write block of data
+//    TBLPTRU = (uint8_t)0x30;    // Load Table point register
+//    TBLPTRH = (uint8_t)0x00;
+//    for (i=0; i < 14; i++)
+//    {
+//        TBLPTRL = i;
+//        TABLAT = cfgWrBufPtr[i];  // Load data byte
+//        asm("TBLWT");
+//        
+//        FLASH_PerformWrite(true);
+//    }
+    // Write Configs...
+    for (bAdd=0; bAdd < 14; bAdd++)
     {
-        TBLPTRL = i;
-        TABLAT = cfgWrBufPtr[i];  // Load data byte
-        asm("TBLWT");
-        
-        FLASH_PerformWrite(true);
+        uint8_t GIEBitValue = INTCONbits.GIE;
+
+        EEADR = (bAdd & 0xFF);
+        EEDATA = cfgWrBufPtr[bAdd];
+        EECON1bits.EEPGD = 0;
+        EECON1bits.CFGS = 1;
+        EECON1bits.WREN = 1;
+        INTCONbits.GIE = 0;     // Disable interrupts
+        EECON2 = 0x55;
+        EECON2 = 0xAA;
+        EECON1bits.WR = 1;
+        // Wait for write to complete
+        while (EECON1bits.WR)
+        {
+        }
+
+        EECON1bits.WREN = 0;
+        INTCONbits.GIE = GIEBitValue;   // Restore interrupt enable
     }
     return 0;
 }
@@ -186,6 +209,7 @@ int8_t FLASH_PerformWrite(bool writeCFGS){
 
     return 0;
 }
+
 void FLASH_EraseBlock(uint32_t baseAddr)
 {
     uint8_t GIEBitValue = INTCONbits.GIE;   // Save interrupt enable

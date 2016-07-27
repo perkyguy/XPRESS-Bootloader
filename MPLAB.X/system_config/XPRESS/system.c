@@ -20,10 +20,11 @@ limitations under the License.
 #include <xc.h>
 #include "system.h"
 #include "system_config.h"
-#include "usb.h"
-#include "fileio.h"
-#include "uart.h"
-#include "direct.h"
+//#include "usb.h"
+//#include "fileio.h"
+//#include "uart.h"
+//#include "direct.h"
+//#include "memory.h"
 #include "app_space.h"
 
 /** CONFIGURATION Bits **********************************************/
@@ -38,15 +39,15 @@ limitations under the License.
 #pragma config nPWRTEN  = OFF       // Power-up Timer Enable (Power up timer disabled)
 #pragma config BOREN    = SBORDIS   // Brown-out Reset Enable (BOR enabled in hardware (SBOREN is ignored))
 #pragma config BORV     = 190       // Brown-out Reset Voltage (BOR set to 1.9V nominal)
-#pragma config nLPBOR   = ON        // Low-Power Brown-out Reset (Low-Power Brown-out Reset enabled)
-#pragma config WDTEN    = SWON      // Watchdog Timer Enable bits (WDT controlled by firmware (SWDTEN enabled))
+#pragma config nLPBOR   = OFF       // Low-Power Brown-out Reset (Low-Power Brown-out Reset enabled)
+#pragma config WDTEN    = OFF       // Watchdog Timer Enable bits (WDT controlled by firmware (SWDTEN enabled))
 #pragma config WDTPS    = 32768     // Watchdog Timer Postscaler (1:32768)
 #pragma config CCP2MX   = RC1       // CCP2 MUX bit (CCP2 input/output is multiplexed with RC1)
 #pragma config PBADEN   = OFF       // PORTB A/D Enable bit (PORTB<5:0> pins are configured as digital I/O on Reset)
 #pragma config T3CMX    = RC0       // Timer3 Clock Input MUX bit (T3CKI function is on RC0)
 #pragma config SDOMX    = RC7       // SDO Output MUX bit (SDO function is on RC7)
 #pragma config MCLRE    = ON        // Master Clear Reset Pin Enable (MCLR pin enabled; RE3 input disabled)
-#pragma config STVREN   = ON        // Stack Full/Underflow Reset (Stack full/underflow will cause Reset)
+#pragma config STVREN   = OFF       // Stack Full/Underflow Reset (Stack full/underflow will cause Reset)
 #pragma config LVP      = OFF       // Single-Supply ICSP Enable bit (Single-Supply ICSP disabled)
 #pragma config ICPRT    = OFF       // Dedicated In-Circuit Debug/Programming Port Enable (ICPORT disabled)
 #pragma config XINST    = OFF       // Extended Instruction Set Enable bit (Instruction set extension and Indexed Addressing mode disabled)
@@ -137,10 +138,9 @@ void SYSTEM_Initialize(void)
     LED_On(GREEN_LED);
     LED_Enable(RED_LED);
     LED_Enable(GREEN_LED);
-    BUTTON_Enable(BUTTON_S1);
-    UART_Initialize();
-    DIRECT_Initialize();
-    USBDeviceInit();	//usb_device.c.  Initializes USB module SFRs and firmware
+//    UART_Initialize();
+//    DIRECT_Initialize();
+//    USBDeviceInit();	//usb_device.c.  Initializes USB module SFRs and firmware
     					//variables to known states.
 }
 
