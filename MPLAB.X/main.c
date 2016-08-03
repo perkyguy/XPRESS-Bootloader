@@ -84,7 +84,7 @@ MAIN_RETURN main(void)
 //        APP_DeviceCDCEmulatorTasks();
 
     }//end while
-    APP_Run();
+    asm("GOTO 0x3000"); // Goto our Application address, don't consume stack
 }//end main
 
 

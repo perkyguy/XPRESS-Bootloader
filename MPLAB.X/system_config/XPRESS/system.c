@@ -44,7 +44,7 @@ limitations under the License.
 #pragma config CCP2MX   = RC1       // CCP2 MUX bit (CCP2 input/output is multiplexed with RC1)
 #pragma config PBADEN   = OFF       // PORTB A/D Enable bit (PORTB<5:0> pins are configured as digital I/O on Reset)
 #pragma config T3CMX    = RC0       // Timer3 Clock Input MUX bit (T3CKI function is on RC0)
-#pragma config SDOMX    = RC7       // SDO Output MUX bit (SDO function is on RC7)
+#pragma config SDOMX    = RB3       // SDO Output MUX bit (SDO function is on RB3)
 #pragma config MCLRE    = ON        // Master Clear Reset Pin Enable (MCLR pin enabled; RE3 input disabled)
 #pragma config STVREN   = ON        // Stack Full/Underflow Reset (Stack full/underflow will cause Reset)
 #pragma config LVP      = OFF       // Single-Supply ICSP Enable bit (Single-Supply ICSP disabled)
