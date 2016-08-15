@@ -21,14 +21,11 @@ limitations under the License.
 #include <stdbool.h>
 #include <xc.h>
 
-#define LED_D1_LAT      LATAbits.LATA0
-#define LED_D2_LAT      LATAbits.LATA1
+#define LED_D1_LAT      LATBbits.LATB7
+#define LED_D2_LAT      LATBbits.LATB6
 
-#define LED_D1_TRIS     TRISAbits.TRISA0
-#define LED_D2_TRIS     TRISAbits.TRISA1
-
-#define LED_D1_ANSEL    ANSELAbits.ANSA0
-#define LED_D2_ANSEL    ANSELAbits.ANSA1
+#define LED_D1_TRIS     TRISBbits.TRISB7
+#define LED_D2_TRIS     TRISBbits.TRISB6
 
 #define LED_ON  1
 #define LED_OFF 0
@@ -192,12 +189,10 @@ void LED_Enable(LED led)
     {
         case LED_D1:
             LED_D1_TRIS = PIN_OUTPUT;
-            LED_D1_ANSEL = PIN_DIGITAL;
             break;
 
         case LED_D2:
             LED_D2_TRIS = PIN_OUTPUT;
-            LED_D1_ANSEL = PIN_DIGITAL;
             break;
 			
         case LED_NONE:

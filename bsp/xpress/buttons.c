@@ -25,11 +25,9 @@ limitations under the License.
 #include <buttons.h>
 
 /*** Button Definitions *********************************************/
-#define S1_PORT  PORTBbits.RB0
+#define S1_PORT  PORTBbits.RB6
 
-#define S1_TRIS  TRISBbits.TRISB0
-
-#define S1_ANSEL ANSELBbits.ANSB0
+#define S1_TRIS  TRISBbits.TRISB6
 
 #define BUTTON_PRESSED      0
 #define BUTTON_NOT_PRESSED  1
@@ -92,7 +90,6 @@ void BUTTON_Enable(BUTTON button)
     {
         case BUTTON_S1:
             S1_TRIS = PIN_INPUT;
-            S1_ANSEL = PIN_DIGITAL;
             break;
 			
         case BUTTON_NONE:
