@@ -29,8 +29,8 @@ limitations under the License.
 
 #define S1_TRIS  TRISBbits.TRISB6
 
-#define BUTTON_PRESSED      0
-#define BUTTON_NOT_PRESSED  1
+#define BUTTON_PRESSED      1
+#define BUTTON_NOT_PRESSED  0
 
 #define PIN_INPUT           1
 #define PIN_OUTPUT          0

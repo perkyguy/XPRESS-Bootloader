@@ -6,10 +6,10 @@ USB-MSD Bootloader
 
 This application is designed to act as a boot loader for the MPLAB
 Xpress Evaluation Board's 18F25K50. Specifically it was meant to be 
-used for the Hackaday Belgrade Badge.
+used for the Pololu P-Star 25K50 Board.
 
-Additional information about the Hackaday Belgrade Badge can be found at
-[https://hackaday.io/project/9509-badge-for-hackaday-belgrade-conference](<https://hackaday.io/project/9509-badge-for-hackaday-belgrade-conference>)
+Additional information about the P-Star Board can be found at
+[https://www.pololu.com/product/3150](<https://www.pololu.com/product/3150>)
 
 Additional information about the MPLAB Xpress project can be found at
 [https://mplabxpress.microchip.com](<https://mplabxpress.microchip.com>)
@@ -25,15 +25,17 @@ mla\_licensing\@microchip.com.
 
 Usage
 -----
--   Power off the board and press Button S1 (RB0 to digital low), Xpress Board has this labeled as "Reset"
+This is meant to operate in much the same way as the original bootloader on the board
 
--   Apply power to the board, and then release the button (RB0 to Digital High)
+-   Power off the board and pull RB6 High
 
--   A new mass storage device named HackABadge should appear
+-   Apply power to the board, and then pull RB6 Low
+
+-   A new mass storage device named P-STAR25K50 should appear
 
 -   Copy a hex file (appropriately addressed) to this device
 
--   Press the button S1 again to exit the bootloader
+-   Pull RB6 High again to exit bootloader mode
 
 -   Upon exiting the bootloader, or on a restart, code execution will begin at **0x3000**
 
