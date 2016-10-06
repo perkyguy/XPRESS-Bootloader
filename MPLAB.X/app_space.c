@@ -56,7 +56,7 @@ bool APP_inProgress( void) {
 }
 
 bool APP_addressInRange(uint32_t address) {
-	return address > APP_START_ADDRESS && address < APP_END_ADDRESS;
+	return address >= APP_START_ADDRESS && address < APP_END_ADDRESS;
 }
 void APP_bulkErase( void) {
     // Erase the APP Space

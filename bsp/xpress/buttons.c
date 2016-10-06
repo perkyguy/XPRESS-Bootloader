@@ -25,11 +25,11 @@ limitations under the License.
 #include <buttons.h>
 
 /*** Button Definitions *********************************************/
-#define S1_PORT  PORTBbits.RB0
+#define S1_PORT  PORTBbits.RB2
 
-#define S1_TRIS  TRISBbits.TRISB0
+#define S1_TRIS  TRISBbits.TRISB2
 
-#define S1_ANSEL ANSELBbits.ANSB0
+#define S1_ANSEL ANSELBbits.ANSB2
 
 #define BUTTON_PRESSED      0
 #define BUTTON_NOT_PRESSED  1

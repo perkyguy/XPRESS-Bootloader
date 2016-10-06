@@ -52,6 +52,8 @@ limitations under the License.
 #define USB_BUS_SENSE       1
 #endif
 
+#define VBUS_INPUT PORTAbits.RA5
+
 //Uncomment this to make the output HEX of this project
 //   to be able to be bootloaded using the HID bootloader
 #define PROGRAMMABLE_WITH_USB_HID_BOOTLOADER

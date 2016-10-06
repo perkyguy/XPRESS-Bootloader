@@ -30,6 +30,7 @@ limitations under the License.
 #include "direct.h"
 #include "app_space.h"
 
+
 /********************************************************************
  * Function:        void main(void)
  *******************************************************************/
@@ -37,7 +38,7 @@ MAIN_RETURN main(void)
 {
     bool run_bootloader;
     SYSTEM_Initialize();
-    run_bootloader = BUTTON_IsPressed(BUTTON_S1);
+    run_bootloader = BUTTON_IsPressed(BUTTON_S1) && VBUS_INPUT;
     if(run_bootloader){
         while(BUTTON_IsPressed(BUTTON_S1)) ; // Let go of the button!
         USBDeviceInit();
@@ -45,7 +46,7 @@ MAIN_RETURN main(void)
         DIRECT_Initialize();    // reset the programming state machine
     }
     
-    while(run_bootloader){
+    while(run_bootloader && VBUS_INPUT){
         SYSTEM_Tasks();
 
         #if defined(USB_POLLING)
@@ -84,7 +85,7 @@ MAIN_RETURN main(void)
 //        APP_DeviceCDCEmulatorTasks();
 
     }//end while
-    asm("GOTO 0x3000"); // Goto our Application address, don't consume stack
+    asm("goto " str(APP_ENTRY_ADDRESS)); // Bounce to our App's entry point
 }//end main
 
 

@@ -21,17 +21,17 @@ limitations under the License.
 #include <stdbool.h>
 #include <xc.h>
 
-#define LED_D1_LAT      LATAbits.LATA0
-#define LED_D2_LAT      LATAbits.LATA1
+#define LED_D1_LAT      LATCbits.LATC2
+#define LED_D2_LAT      LATCbits.LATC2
 
-#define LED_D1_TRIS     TRISAbits.TRISA0
-#define LED_D2_TRIS     TRISAbits.TRISA1
+#define LED_D1_TRIS     TRISCbits.TRISC2
+#define LED_D2_TRIS     TRISCbits.TRISC2
 
-#define LED_D1_ANSEL    ANSELAbits.ANSA0
-#define LED_D2_ANSEL    ANSELAbits.ANSA1
+//#define LED_D1_ANSEL    ANSELCbits.ANSC2
+#define LED_D2_ANSEL    TRISCbits.TRISC2
 
-#define LED_ON  1
-#define LED_OFF 0
+#define LED_ON  0
+#define LED_OFF 1
 
 #define PIN_INPUT           1
 #define PIN_OUTPUT          0
@@ -59,9 +59,9 @@ void LED_On(LED led)
 {
     switch(led)
     {
-        case LED_D1:
-            LED_D1_LAT = LED_ON;
-            break;
+//        case LED_D1:
+//            LED_D1_LAT = LED_ON;
+//            break;
 
         case LED_D2:
             LED_D2_LAT = LED_ON;
@@ -92,9 +92,9 @@ void LED_Off(LED led)
 {
     switch(led)
     {
-        case LED_D1:
-            LED_D1_LAT = LED_OFF;
-            break;
+//        case LED_D1:
+//            LED_D1_LAT = LED_OFF;
+//            break;
 
         case LED_D2:
             LED_D2_LAT = LED_OFF;
@@ -125,9 +125,9 @@ void LED_Toggle(LED led)
 {
     switch(led)
     {
-        case LED_D1:
-            LED_D1_LAT ^= 1;
-            break;
+//        case LED_D1:
+//            LED_D1_LAT ^= 1;
+//            break;
 
         case LED_D2:
             LED_D2_LAT ^= 1;
@@ -158,8 +158,8 @@ bool LED_Get(LED led)
 {
     switch(led)
     {
-        case LED_D1:
-            return ( (LED_D1_LAT == LED_ON) ? true : false );
+//        case LED_D1:
+//            return ( (LED_D1_LAT == LED_ON) ? true : false );
 
         case LED_D2:
             return ( (LED_D2_LAT == LED_ON) ? true : false );
@@ -190,14 +190,14 @@ void LED_Enable(LED led)
 {
     switch(led)
     {
-        case LED_D1:
-            LED_D1_TRIS = PIN_OUTPUT;
-            LED_D1_ANSEL = PIN_DIGITAL;
-            break;
+//        case LED_D1:
+//            LED_D1_TRIS = PIN_OUTPUT;
+//            LED_D1_ANSEL = PIN_DIGITAL;
+//            break;
 
         case LED_D2:
             LED_D2_TRIS = PIN_OUTPUT;
-            LED_D1_ANSEL = PIN_DIGITAL;
+            LED_D2_ANSEL = PIN_DIGITAL;
             break;
 			
         case LED_NONE:

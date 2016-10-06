@@ -11,10 +11,11 @@
 
 #define APP_init() APP_exit();
 #define APP_END_ADDRESS     END_FLASH
-#define APP_START_ADDRESS   0x2FFF
+#define APP_START_ADDRESS   0x3300
+#define APP_ENTRY_ADDRESS   0x2B00
 
-//#define APP_INT_LP_VECTOR   0x3008
-//#define APP_INT_HP_VECTOR   0x3018
+#define APP_INT_HP_VECTOR   0x2B08
+#define APP_INT_LP_VECTOR   0x2B18
 //#define APP_CONFIG_STORE    0x3FF0
 
 #define CFG_ADDRESS         0x8000   
@@ -52,9 +53,9 @@ void APP_rowWrite( uint32_t address, uint8_t *buffer, uint8_t count);
 void APP_rowErase( uint32_t address);
 void APP_cfgWrite( uint8_t *buffer);
 
-void APP_Run(void) @0x3000;
-void APP_ISR_High(void) @0x3008;
-void APP_ISR_Low(void) @0x3018;
+//void APP_Run(void) @0x3000;
+//void APP_ISR_High(void) @0x3008;
+//void APP_ISR_Low(void) @0x3018;
 
 #endif	/* APP_SPACE_H */
 
