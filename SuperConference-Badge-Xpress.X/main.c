@@ -37,6 +37,7 @@ limitations under the License.
 MAIN_RETURN main(void)
 {
     bool run_bootloader;
+    uint16_t blink_timer = 0;
     SYSTEM_Initialize();
     run_bootloader = BUTTON_IsPressed(BUTTON_S1) && VBUS_INPUT;
     if(run_bootloader){
@@ -75,15 +76,14 @@ MAIN_RETURN main(void)
             // implement the reset button - Stop bootloader if we aren't programming
             USBSoftDetach();
             run_bootloader = false;
-        } else {
-            LED_On(GREEN_LED);
-            LED_Off(RED_LED);
         }
 
         //Application specific tasks
         APP_DeviceMSDTasks();
 //        APP_DeviceCDCEmulatorTasks();
-
+        if(blink_timer-- == 0){
+            LED_Toggle(GREEN_LED);
+        }
     }//end while
     asm("goto " str(APP_ENTRY_ADDRESS)); // Bounce to our App's entry point
 }//end main
