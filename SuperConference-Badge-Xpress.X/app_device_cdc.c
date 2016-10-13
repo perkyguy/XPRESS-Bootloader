@@ -17,6 +17,7 @@ limitations under the License.
 
 *******************************************************************************/
 
+#ifdef USB_USE_CDC
 /** INCLUDES *******************************************************/
 #include <stdint.h>
 #include <string.h>
@@ -212,3 +213,4 @@ void APP_DeviceCDCEmulatorTasks()
 
     CDCTxService();
 }
+#endif

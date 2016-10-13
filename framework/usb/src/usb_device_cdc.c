@@ -44,12 +44,12 @@ please contact mla_licensing@microchip.com
 
 ********************************************************************/
 
+#ifdef USB_USE_CDC
 /** I N C L U D E S **********************************************************/
 #include "system.h"
 #include "usb.h"
 #include "usb_device_cdc.h"
 
-#ifdef USB_USE_CDC
 
 #ifndef FIXED_ADDRESS_MEMORY
     #define CDC_IN_DATA_BUFFER_ADDRESS_TAG

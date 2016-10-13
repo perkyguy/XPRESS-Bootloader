@@ -14,8 +14,10 @@
 #define APP_START_ADDRESS   0x3300
 #define APP_ENTRY_ADDRESS   0x2B00
 
-#define APP_INT_HP_VECTOR   0x2B08
-#define APP_INT_LP_VECTOR   0x2B18
+//#define APP_INT_HP_VECTOR   0x2B08
+//#define APP_INT_LP_VECTOR   0x2B18
+#define APP_INT_HP_VECTOR   0x3308
+#define APP_INT_LP_VECTOR   0x3318
 //#define APP_CONFIG_STORE    0x3FF0
 
 #define CFG_ADDRESS         0x8000   

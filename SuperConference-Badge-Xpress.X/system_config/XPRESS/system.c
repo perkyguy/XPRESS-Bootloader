@@ -28,7 +28,7 @@ limitations under the License.
 
 /** CONFIGURATION Bits **********************************************/
 #pragma config PLLSEL   = PLL3X     // PLL Selection (3x clock multiplier)
-#pragma config CFGPLLEN = OFF        // PLL Enable Configuration bit (PLL Disabled (firmware controlled))
+#pragma config CFGPLLEN = ON        // PLL Enable Configuration bit (PLL Disabled (firmware controlled))
 #pragma config CPUDIV   = NOCLKDIV  // CPU System Clock Postscaler (CPU uses system clock (no divide))
 #pragma config LS48MHZ  = SYS48X8   // Low Speed USB mode with 48 MHz system clock (System clock at 48 MHz, USB clock divider is set to 8)
 #pragma config FOSC     = INTOSCIO  // Oscillator Selection (Internal oscillator)
@@ -43,7 +43,7 @@ limitations under the License.
 #pragma config WDTPS    = 32768     // Watchdog Timer Postscaler (1:32768)
 #pragma config CCP2MX   = RC1       // CCP2 MUX bit (CCP2 input/output is multiplexed with RC1)
 #pragma config PBADEN   = OFF       // PORTB A/D Enable bit (PORTB<5:0> pins are configured as digital I/O on Reset)
-#pragma config T3CMX    = RB5       // Timer3 Clock Input MUX bit (T3CKI function is on RC0)
+#pragma config T3CMX    = RC0       // Timer3 Clock Input MUX bit (T3CKI function is on RC0)
 #pragma config SDOMX    = RB3       // SDO Output MUX bit (SDO function is on RC7)
 #pragma config MCLRE    = ON        // Master Clear Reset Pin Enable (MCLR pin enabled; RE3 input disabled)
 #pragma config STVREN   = OFF        // Stack Full/Underflow Reset (Stack full/underflow will cause Reset)

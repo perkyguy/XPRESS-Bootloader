@@ -10,9 +10,9 @@ CND_CONF=XPRESS
 CND_DISTDIR=dist
 TMPDIR=build/${CND_CONF}/${IMAGE_TYPE}/tmp-packaging
 TMPDIRNAME=tmp-packaging
-OUTPUT_PATH=dist/${CND_CONF}/${IMAGE_TYPE}/MPLAB.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
-OUTPUT_BASENAME=MPLAB.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
-PACKAGE_TOP_DIR=mplab.x/
+OUTPUT_PATH=dist/${CND_CONF}/${IMAGE_TYPE}/SuperConference-Badge-Xpress.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
+OUTPUT_BASENAME=SuperConference-Badge-Xpress.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
+PACKAGE_TOP_DIR=superconference-badge-xpress.x/
 
 # Functions
 function checkReturnCode
@@ -57,15 +57,15 @@ mkdir -p ${TMPDIR}
 
 # Copy files and create directories and links
 cd "${TOP}"
-makeDirectory ${TMPDIR}/mplab.x/bin
+makeDirectory ${TMPDIR}/superconference-badge-xpress.x/bin
 copyFileToTmpDir "${OUTPUT_PATH}" "${TMPDIR}/${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}" 0755
 
 
 # Generate tar file
 cd "${TOP}"
-rm -f ${CND_DISTDIR}/${CND_CONF}/package/mplab.x.tar
+rm -f ${CND_DISTDIR}/${CND_CONF}/package/superconference-badge-xpress.x.tar
 cd ${TMPDIR}
-tar -vcf ../../../../${CND_DISTDIR}/${CND_CONF}/package/mplab.x.tar *
+tar -vcf ../../../../${CND_DISTDIR}/${CND_CONF}/package/superconference-badge-xpress.x.tar *
 checkReturnCode
 
 # Cleanup
