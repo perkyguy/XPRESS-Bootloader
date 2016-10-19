@@ -54,8 +54,8 @@ Memory Locations
 | ...    |                               |
 | 0x32FF |  Kernel End                   |
 | 0x3300 |  App Start                    |
-| 0x2B08 |  App Hi Priority Interrupt    |
-| 0x2B18 |  App Lo Priority Interrupt    |
+| 0x3308 |  App Hi Priority Interrupt    |
+| 0x3318 |  App Lo Priority Interrupt    |
 | ...    |                               |
 | 0x7FFF |  Application End              |
 
